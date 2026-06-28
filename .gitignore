@@ -6,5 +6,6 @@
 vcpkg_installed/
 LuauLayer/
 Release/
+Debug/
 /LuauLayer.vcxproj.filters
 /LuauLayer.vcxproj.user
