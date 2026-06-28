@@ -153,12 +153,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="hooks.h" />
-    <ClInclude Include="morelualibs.h" />
+    <ClInclude Include="morelibs.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="hooks.cpp" />
     <ClCompile Include="larchipelagolib.cpp" />
+    <ClCompile Include="lmidilib.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

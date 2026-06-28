@@ -1,0 +1,3 @@
+[submodule "subprojects/lua-lrtmidi"]
+	path = subprojects/lua-lrtmidi
+	url = https://github.com/osch/lua-lrtmidi.git
