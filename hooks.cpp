@@ -8,6 +8,7 @@
 #include <cassert>
 #include <vector>
 #include <thread>
+#include "larchipelagolib.h"
 struct HookEntry {
     uintptr_t address;
     LPVOID detour;
@@ -44,7 +45,12 @@ bool hook(uintptr_t targetAddress, LPVOID detour, LPVOID original)
 
 lua_State* __cdecl LuaNewStateDetour(lua_Alloc f, void* ud)
 {
-    return lua_newstate(f, ud);
+    lua_State* L = lua_newstate(f, ud);
+
+    lua_pushcfunction(L, luaopen_penguin, NULL);
+    lua_pushstring(L, "penguin");
+    lua_call(L, 1, 0);
+    return L;
 }
 
 void __cdecl LuaOpenLibsDetour(lua_State* L)
