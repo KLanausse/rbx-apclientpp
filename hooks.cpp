@@ -8,7 +8,7 @@
 #include <cassert>
 #include <vector>
 #include <thread>
-#include "larchipelagolib.h"
+#include "morelibs.h"
 struct HookEntry {
     uintptr_t address;
     LPVOID detour;
@@ -47,9 +47,15 @@ lua_State* __cdecl LuaNewStateDetour(lua_Alloc f, void* ud)
 {
     lua_State* L = lua_newstate(f, ud);
 
-    lua_pushcfunction(L, luaopen_penguin, NULL);
-    lua_pushstring(L, "penguin");
-    lua_call(L, 1, 0);
+    // Load Extra Librarys
+    const luaL_Reg* lib = morelibs;
+    for (; lib->func; lib++)
+    {
+        lua_pushcfunction(L, lib->func, NULL);
+        lua_pushstring(L, lib->name);
+        lua_call(L, 1, 0);
+    }
+
     return L;
 }
 
