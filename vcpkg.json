@@ -5,6 +5,8 @@
   "dependencies": [
     "luau",
     "minhook",
-    "rtmidi"
+    "rtmidi",
+    "zlib",
+    "openssl"
   ]
 }
