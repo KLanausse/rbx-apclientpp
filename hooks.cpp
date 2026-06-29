@@ -48,13 +48,8 @@ lua_State* __cdecl LuaNewStateDetour(lua_Alloc f, void* ud)
     lua_State* L = lua_newstate(f, ud);
 
     // Load Extra Librarys
-    const luaL_Reg* lib = morelibs;
-    for (; lib->func; lib++)
-    {
-        lua_pushcfunction(L, lib->func, NULL);
-        lua_pushstring(L, lib->name);
-        lua_call(L, 1, 0);
-    }
+    luaopen_apclientpp(L);
+    luaopen_luamidi(L);
 
     return L;
 }

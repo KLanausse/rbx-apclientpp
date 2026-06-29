@@ -40,8 +40,9 @@
 #pragma GCC diagnostic error "-Wconversion"
 #endif
 
-// Luau compat
-#define lua_pushcfunction(L, fn) lua_pushcfunction(L, fn, "APClient")
+// COMPAT
+#define luaL_ref(L, idx)         ((void)(idx), lua_ref(L, -1))
+#define luaL_unref(L, idx, ref)  ((void)(idx), lua_unref(L, ref))
 
 // IMPORTANT: apclientpp can't be used across threads, so capturing L is kind of ok
 // FIXME: xmove would be valid outside of an apclient callback, but this breaks the capture and refs
@@ -202,7 +203,7 @@ public:
         assign_set("missing_locations", get_missing_locations(), 1);
 
         if (slot_connected_cb.valid()) {
-            lua_pushcfunction(_L, error_handler);
+            lua_pushcfunction(_L, error_handler, "APClient");
             lua_rawgeti(_L, LUA_REGISTRYINDEX, slot_connected_cb.ref);
             json_to_lua(_L, slot_data);
             if (lua_pcall(_L, 1, 0, -3)) {
@@ -219,7 +220,7 @@ public:
         assign_set("missing_locations", get_missing_locations(), 1);
 
         if (location_checked_cb.valid()) {
-            lua_pushcfunction(_L, error_handler);
+            lua_pushcfunction(_L, error_handler, "APClient");
             lua_rawgeti(_L, LUA_REGISTRYINDEX, location_checked_cb.ref);
             {
                 json j = locations;
@@ -241,7 +242,7 @@ public:
 
         APClient* parent = this;
         parent->set_socket_connected_handler([this]() {
-            lua_pushcfunction(_L, error_handler);
+            lua_pushcfunction(_L, error_handler, "APClient");
             lua_rawgeti(_L, LUA_REGISTRYINDEX, socket_connected_cb.ref);
             if (lua_pcall(_L, 0, 0, -2)) {
                 cb_error("socket_connected");
@@ -257,7 +258,7 @@ public:
 
         APClient* parent = this;
         parent->set_socket_error_handler([this](const std::string& msg) {
-            lua_pushcfunction(_L, error_handler);
+            lua_pushcfunction(_L, error_handler, "APClient");
             lua_rawgeti(_L, LUA_REGISTRYINDEX, socket_error_cb.ref);
             lua_pushstring(_L, msg.c_str());
             if (lua_pcall(_L, 1, 0, -3)) {
@@ -274,7 +275,7 @@ public:
 
         APClient* parent = this;
         parent->set_socket_disconnected_handler([this]() {
-            lua_pushcfunction(_L, error_handler);
+            lua_pushcfunction(_L, error_handler, "APClient");
             lua_rawgeti(_L, LUA_REGISTRYINDEX, socket_disconnected_cb.ref);
             if (lua_pcall(_L, 0, 0, -2)) {
                 cb_error("socket_disconnected");
@@ -290,7 +291,7 @@ public:
 
         APClient* parent = this;
         parent->set_room_info_handler([this]() {
-            lua_pushcfunction(_L, error_handler);
+            lua_pushcfunction(_L, error_handler, "APClient");
             lua_rawgeti(_L, LUA_REGISTRYINDEX, room_info_cb.ref);
             if (lua_pcall(_L, 0, 0, -2)) {
                 cb_error("room_info");
@@ -312,7 +313,7 @@ public:
 
         APClient* parent = this;
         parent->set_slot_refused_handler([this](const std::list<std::string>& reason) {
-            lua_pushcfunction(_L, error_handler);
+            lua_pushcfunction(_L, error_handler, "APClient");
             lua_rawgeti(_L, LUA_REGISTRYINDEX, slot_refused_cb.ref);
             {
                 json j = reason;
@@ -334,7 +335,7 @@ public:
 
         APClient* parent = this;
         parent->set_items_received_handler([this](const std::list<NetworkItem>& items) {
-            lua_pushcfunction(_L, error_handler);
+            lua_pushcfunction(_L, error_handler, "APClient");
             lua_rawgeti(_L, LUA_REGISTRYINDEX, items_received_cb.ref);
             {
                 json j = items;
@@ -354,7 +355,7 @@ public:
 
         APClient* parent = this;
         parent->set_location_info_handler([this](const std::list<NetworkItem>& items) {
-            lua_pushcfunction(_L, error_handler);
+            lua_pushcfunction(_L, error_handler, "APClient");
             lua_rawgeti(_L, LUA_REGISTRYINDEX, location_info_cb.ref);
             {
                 json j = items;
@@ -380,7 +381,7 @@ public:
 
         APClient* parent = this;
         parent->set_data_package_changed_handler([this](const json& data_package) {
-            lua_pushcfunction(_L, error_handler);
+            lua_pushcfunction(_L, error_handler, "APClient");
             lua_rawgeti(_L, LUA_REGISTRYINDEX, data_package_changed_cb.ref);
             json_to_lua(_L, data_package);
             if (lua_pcall(_L, 1, 0, -3)) {
@@ -397,7 +398,7 @@ public:
 
         APClient* parent = this;
         parent->set_print_handler([this](const std::string& msg) {
-            lua_pushcfunction(_L, error_handler);
+            lua_pushcfunction(_L, error_handler, "APClient");
             lua_rawgeti(_L, LUA_REGISTRYINDEX, print_cb.ref);
             lua_pushstring(_L, msg.c_str());
             if (lua_pcall(_L, 1, 0, -3)) {
@@ -414,7 +415,7 @@ public:
 
         APClient* parent = this;
         parent->set_print_json_handler([this](const json& command) {
-            lua_pushcfunction(_L, error_handler);
+            lua_pushcfunction(_L, error_handler, "APClient");
             lua_rawgeti(_L, LUA_REGISTRYINDEX, print_json_cb.ref);
             json_to_lua(_L, command);
             lua_getfield(_L, -1, "data");
@@ -433,7 +434,7 @@ public:
 
         APClient* parent = this;
         parent->set_bounced_handler([this](const json& bounce) {
-            lua_pushcfunction(_L, error_handler);
+            lua_pushcfunction(_L, error_handler, "APClient");
             lua_rawgeti(_L, LUA_REGISTRYINDEX, bounced_cb.ref);
             json_to_lua(_L, bounce);
             if (lua_pcall(_L, 1, 0, -3)) {
@@ -450,7 +451,7 @@ public:
 
         APClient* parent = this;
         parent->set_retrieved_handler([this](const std::map<std::string, json>& data, const json& message) {
-            lua_pushcfunction(_L, error_handler);
+            lua_pushcfunction(_L, error_handler, "APClient");
             lua_rawgeti(_L, LUA_REGISTRYINDEX, retrieved_cb.ref);
             {
                 json j = data;
@@ -475,7 +476,7 @@ public:
 
         APClient* parent = this;
         parent->set_set_reply_handler([this](const json& message) {
-            lua_pushcfunction(_L, error_handler);
+            lua_pushcfunction(_L, error_handler, "APClient");
             lua_rawgeti(_L, LUA_REGISTRYINDEX, set_reply_cb.ref);
             json_to_lua(_L, message);
             if (lua_pcall(_L, 1, 0, -3)) {
@@ -1598,7 +1599,7 @@ static int apclient_Set(lua_State* L)
 static int apclient_poll(lua_State* L)
 {
     // run actual poll via pcall to avoid trashing any state
-    lua_pushcfunction(L, LuaAPClient::poll);
+    lua_pushcfunction(L, LuaAPClient::poll, "APClient");
     lua_pushvalue(L, -2);
     if (lua_pcall(L, 1, 1, 0)) {
         lua_error(L);
@@ -1609,7 +1610,7 @@ static int apclient_poll(lua_State* L)
 // meta table ("class")
 
 #define SET_CFUNC(name) \
-    lua_pushcfunction(L, apclient_ ## name); \
+    lua_pushcfunction(L, apclient_ ## name, "APClient"); \
     lua_setfield(L, -2, #name);
 
 
@@ -1622,13 +1623,13 @@ static int register_apclient(lua_State* L)
     luaL_newmetatable(L, LuaAPClient::Lua_Name);
 
     // special functions
-    lua_pushcfunction(L, apclient_del);
+    lua_pushcfunction(L, apclient_del, "APClient");
     lua_setfield(L, -2, "__gc");
 
-    lua_pushcfunction(L, LuaAPClient::__index);
+    lua_pushcfunction(L, LuaAPClient::__index, "APClient");
     lua_setfield(L, -2, "__index");
 
-    lua_pushcfunction(L, LuaAPClient::__newindex);
+    lua_pushcfunction(L, LuaAPClient::__newindex, "APClient");
     lua_setfield(L, -2, "__newindex");
 
     // functions
@@ -1761,7 +1762,7 @@ static int register_apclient(lua_State* L)
     // calling the metatable should be the same as new for easy use,
     // so set a metatable for the metatable
     lua_newtable(L);
-    lua_pushcfunction(L, apclient_call);
+    lua_pushcfunction(L, apclient_call, "APClient");
     lua_setfield(L, -2, "__call");
     lua_setmetatable(L, -2);
 
@@ -1779,6 +1780,8 @@ int luaopen_apclientpp(lua_State* L)
         errorf(L, "register_apclient returned %d (expected 1)", res);
         return 0;
     } // LCOV_EXCL_STOP
+
+    lua_setglobal(L, "APClient");
 
     // return constructor
     return 1;
