@@ -4,6 +4,3 @@
 [submodule "subprojects/wswrap"]
 	path = subprojects/wswrap
 	url = https://github.com/black-sliver/wswrap.git
-[submodule "subprojects/luaglue"]
-	path = subprojects/luaglue
-	url = https://github.com/black-sliver/luaglue.git

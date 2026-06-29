@@ -24,8 +24,8 @@
 #endif
 #endif
 
-#include <luau/lua.h>
-#include <luau/lualib.h>
+#include <Luau/lua.h>
+#include <Luau/lualib.h>
 
 #include <apclient.hpp>
 #include <luacompat.h>
