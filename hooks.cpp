@@ -496,18 +496,19 @@ bool InstallLuaHook()
     freopen_s(&f, "CONOUT$", "w", stdout);
 
     static HookEntry hooks[] = {
-        {0x604AA0, (LPVOID)&LuaNewStateDetour,     (LPVOID*)&original_newstate},
-        {0x5FB7C0, (LPVOID)&lua51L_newmetatable,   (LPVOID*)&original_newmetatable},
-        {0x5FA550, (LPVOID)&lua51_pushValue,       (LPVOID*)&original_pushvalue},
-        {0x5FAE30, (LPVOID)&lua51_setField,        (LPVOID*)&original_setfield},
-        {0x5FC5B0, (LPVOID)&lua51L_register,       (LPVOID*)&original_register},
-        {0x5FAAD0, (LPVOID)&lua51_pushcclosure,    (LPVOID*)&original_pushcclosure},
-        {0x5FAA00, (LPVOID)&lua51_pushstring,      (LPVOID*)&original_pushstring},
-        {0x5FAB70, (LPVOID)&lua51_pushboolean,     (LPVOID*)&original_pushboolean},
-        {0x5FC200, (LPVOID)&lua51L_checklstring,   (LPVOID*)&original_checklstring},
-        {0x5FC000, (LPVOID)&lua51L_loadstring,     (LPVOID*)&original_loadstring},
-        {0x5FB3C0, (LPVOID)&lua51_newuserdata,     (LPVOID*)&original_newuserdata},
-        {0x5FAC10, (LPVOID)&lua51_getfield,        (LPVOID*)&original_getfield},
+        {0x628AC0, (LPVOID)&LuaNewStateDetour,     (LPVOID*)&original_newstate},
+        {0x617AC0, (LPVOID)&lua51L_newmetatable,   (LPVOID*)&original_newmetatable},
+        {0x618C10, (LPVOID)&lua51_pushValue,       (LPVOID*)&original_pushvalue},
+        {0x6194F0, (LPVOID)&lua51_setField,        (LPVOID*)&original_setfield},
+        {0x6188B0, (LPVOID)&lua51L_register,       (LPVOID*)&original_register},
+        {0x619190, (LPVOID)&lua51_pushcclosure,    (LPVOID*)&original_pushcclosure},
+        {0x6190C0, (LPVOID)&lua51_pushstring,      (LPVOID*)&original_pushstring},
+        {0x619230, (LPVOID)&lua51_pushboolean,     (LPVOID*)&original_pushboolean},
+        {0x618500, (LPVOID)&lua51L_checklstring,   (LPVOID*)&original_checklstring},
+        {0x618300, (LPVOID)&lua51L_loadstring,     (LPVOID*)&original_loadstring},
+        {0x619A80, (LPVOID)&lua51_newuserdata,     (LPVOID*)&original_newuserdata},
+        {0x6192D0, (LPVOID)&lua51_getfield,        (LPVOID*)&original_getfield},
+        /*
         {0x5FC0F0, (LPVOID)&lua51L_checkudata,     (LPVOID*)&original_checkudata},
         {0x5FAF70, (LPVOID)&lua51_setmetatable,    (LPVOID*)&original_setmetatable},
         {0x5FA9A0, (LPVOID)&lua51_pushinteger,     (LPVOID*)&original_pushinteger},
@@ -571,6 +572,7 @@ bool InstallLuaHook()
         {0x5FC1D0, (LPVOID)&lua51L_checkany,       (LPVOID*)&originalL_checkany},
         {0x5FC030, (LPVOID)&lua51L_argerror,       (LPVOID*)&originalL_argerror},
         {0x5FA960, (LPVOID)&lua51_pushnil,         (LPVOID*)&original_pushnil}
+        */
     };
 
     for (auto& h : hooks)
