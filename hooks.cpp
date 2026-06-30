@@ -8,6 +8,7 @@
 #include <cassert>
 #include <vector>
 #include <thread>
+#include "morelibs.h"
 struct HookEntry {
     uintptr_t address;
     LPVOID detour;
@@ -44,7 +45,13 @@ bool hook(uintptr_t targetAddress, LPVOID detour, LPVOID original)
 
 lua_State* __cdecl LuaNewStateDetour(lua_Alloc f, void* ud)
 {
-    return lua_newstate(f, ud);
+    lua_State* L = lua_newstate(f, ud);
+
+    // Load Extra Librarys
+    luaopen_apclientpp(L);
+    luaopen_luamidi(L);
+
+    return L;
 }
 
 void __cdecl LuaOpenLibsDetour(lua_State* L)

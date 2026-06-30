@@ -1,3 +1,7 @@
+# rbx-apclientpp
+- [lua-apclientpp](https://github.com/black-sliver/lua-apclientpp)
+- [LuauLayer](https://github.com/stan2474/LuauLayer)
+---
 # LuauLayer
 Wrapping Lua 5.1 calls to Luau to achieve Luau execution in older versions of ROBLOX
 ## Requirements
