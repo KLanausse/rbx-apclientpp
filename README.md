@@ -18,4 +18,4 @@ Wrapping Lua 5.1 calls to Luau to achieve Luau execution in older versions of RO
 7. Click "Add to list", then click "ADD" and close StudPE by clicking the "OK" button in the bottom right corner.
 
 ## Known bugs
-No currently known bugs.
+- calling `loadfile` will cause a crash
