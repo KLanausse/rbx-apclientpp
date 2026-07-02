@@ -86,6 +86,7 @@ typedef const char*(__cdecl* lua51_pushfstring_def)(lua_State* L, const char* fm
 typedef const void (__cdecl* lua51_topointer_def)(lua_State* L, int idx);
 typedef void(__cdecl* lua51L_checkany_def)(lua_State* L, int narg);
 typedef void(__cdecl* lua51L_argerror_def)(lua_State* L, int narg, const char* extramsg);
+typedef int(__cdecl* lua51L_loadfile_def)(lua_State* L, const char* filename);
 
 // ROBLOX typedefs - related to outputting in console
 typedef bool(__cdecl* sub_5D2310_def)(DWORD* ArgList, int index, char* outBuf);
@@ -180,6 +181,7 @@ static lua51_pushfstring_def original_pushfstring = nullptr;
 static lua51_topointer_def original_topointer = nullptr;
 static lua51L_checkany_def originalL_checkany = nullptr;
 static lua51L_argerror_def originalL_argerror = nullptr;
+static lua51L_loadfile_def originalL_loadfile = nullptr;
 static sub_5D2310_def sub_5D2310 = (sub_5D2310_def)0x5D2310;
 static sub_572120_def sub_572120 = (sub_572120_def)0x572120;
 static sub_5C93E0_def sub_5C93E0 = (sub_5C93E0_def)0x5C93E0;

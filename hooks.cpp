@@ -5,6 +5,8 @@
 #include <Luau/lgc.h>
 #include <Luau/luacode.h>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <cassert>
 #include <vector>
 #include <thread>
@@ -458,6 +460,24 @@ int __cdecl lua51_getstack(lua_State* L, int level, lua_Debug* ar51)
     return lua_getinfo(L, level, "n", ar51);
 }
 
+int __cdecl lua51L_loadfile(lua_State* L, const char* filename)
+{
+    printf("Loading %s\n", filename);
+    std::ifstream f(filename);
+
+    if (!f.is_open()) {
+        lua_pushnil(L);
+        lua_pushfstring(L, "cannot open %s: %s", filename, strerror(errno));
+        return 1;
+    }
+
+    std::stringstream buff;
+    buff << f.rdbuf();
+    std::string source = buff.str();
+
+    return lua51L_loadstring(L, source.c_str(), source.size(), filename);
+}
+
 void __cdecl reportError(lua_State* L)
 {
     char handle_buf[16];
@@ -574,7 +594,8 @@ bool InstallLuaHook()
         {0x5C9540, (LPVOID)&lua51_topointer,       (LPVOID*)&original_topointer},
         {0x5CAD80, (LPVOID)&lua51L_checkany,       (LPVOID*)&originalL_checkany},
         {0x5CABE0, (LPVOID)&lua51L_argerror,       (LPVOID*)&originalL_argerror},
-        {0x5C95B0, (LPVOID)&lua51_pushnil,         (LPVOID*)&original_pushnil}
+        {0x5C95B0, (LPVOID)&lua51_pushnil,         (LPVOID*)&original_pushnil},
+        {0x5CA980, (LPVOID)&lua51L_loadfile,       (LPVOID*)&originalL_loadfile}
     };
 
     for (auto& h : hooks)
